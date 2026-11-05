@@ -1,4 +1,4 @@
-# FinMind — AI Fintech Content Bot for Switch
+# ArthaVid — AI Fintech Content Bot for Switch
 
 > Turn market events into viral content in seconds — right from your team chat.
 
@@ -10,13 +10,13 @@ Built for the **[WeMakeDevs "Flip the Switch" Hackathon](https://www.wemakedevs.
 
 You're a student learning markets, paper trading, building financial literacy. You have opinions on IPOs, RBI policy, Nifty movements — but turning those thoughts into quality Twitter threads, LinkedIn posts, and YouTube content takes hours.
 
-**FinMind solves this in seconds.**
+**ArthaVid solves this in seconds.**
 
 ---
 
 ## What It Does
 
-FinMind is an AI agent that lives in your Switch workspace. Mention it with hashtag commands — it instantly creates platform-ready fintech content using Groq's LLM.
+ArthaVid is an AI agent that lives in your Switch workspace. Mention it with hashtag commands — it instantly creates platform-ready fintech content using Groq's LLM.
 
 ### 3-Tag Command System
 
@@ -32,42 +32,42 @@ Combine tags from 3 categories to get exactly the content you need:
 ### Example Commands
 
 ```
-@finmind #nifty #breakout #thread Nifty crossing 25000 resistance today
+@arthavid #nifty #breakout #thread Nifty crossing 25000 resistance today
 ```
 → Twitter thread on Nifty breakout
 
 ```
-@finmind #ipo #bear #linkedin Ola Electric IPO at ₹76 — overvalued?
+@arthavid #ipo #bear #linkedin Ola Electric IPO at ₹76 — overvalued?
 ```
 → LinkedIn post with bearish IPO take
 
 ```
-@finmind #crypto #bull #hook Bitcoin crossed $100k
+@arthavid #crypto #bull #hook Bitcoin crossed $100k
 ```
 → 10 scroll-stopping opening lines for a bullish Bitcoin post
 
 ```
-@finmind #earnings #fundamentals #youtube Reliance Q3 missed estimates
+@arthavid #earnings #fundamentals #youtube Reliance Q3 missed estimates
 ```
 → YouTube title + SEO description + tags
 
 ```
-@finmind #rbi #all RBI kept rates unchanged today
+@arthavid #rbi #all RBI kept rates unchanged today
 ```
 → All 4 platform versions at once
 
 ```
-@finmind #score [paste your draft here]
+@arthavid #score [paste your draft here]
 ```
 → Brutal 1-10 score + full rewrite
 
 ```
-@finmind #hn #crypto
+@arthavid #hn #crypto
 ```
 → Top 5 crypto stories trending on Hacker News right now (live data, no API key)
 
 ```
-@finmind #hn #startup #thread
+@arthavid #hn #startup #thread
 ```
 → Fetches the top HN startup story + generates a Twitter thread from it automatically
 
@@ -77,7 +77,7 @@ Combine tags from 3 categories to get exactly the content you need:
 
 **You see market news** → type one command → get content for Twitter, LinkedIn, Instagram, YouTube in under 10 seconds.
 
-No more staring at a blank screen. No more spending 2 hours writing what FinMind writes in 10 seconds.
+No more staring at a blank screen. No more spending 2 hours writing what ArthaVid writes in 10 seconds.
 
 ---
 
@@ -104,8 +104,8 @@ No more staring at a blank screen. No more spending 2 hours writing what FinMind
 ### 1. Install
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/finmind.git
-cd finmind
+git clone https://github.com/YOUR_USERNAME/arthavid.git
+cd arthavid
 npm install
 cp .env.example .env
 ```
@@ -137,7 +137,7 @@ Go to Mattermost → mention your bot with any hashtag combo → get instant fin
 
 ## Why This Workflow
 
-Most AI content tools are generic. FinMind is built specifically for fintech creators:
+Most AI content tools are generic. ArthaVid is built specifically for fintech creators:
 
 - **Topic tags** give the bot market context automatically — no need to explain what an IPO or RBI rate decision is
 - **Trade tags** add a specific analytical angle — bullish, bearish, technical, fundamental

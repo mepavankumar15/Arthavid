@@ -1,5 +1,5 @@
 {
-  "name": "contentmind",
+  "name": "arthavid",
   "version": "1.0.0",
   "description": "AI content creation bot for Switch/Mattermost — powered by Groq",
   "main": "dist/index.js",

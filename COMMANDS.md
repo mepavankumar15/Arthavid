@@ -1,7 +1,7 @@
-# FinMind — Command Reference
+# ArthaVid — Command Reference
 
 > Mix hashtags from 3 categories to generate exactly the content you need.
-> Usage: `@avyu150 #[topic] #[trade] #[format] [your text]`
+> Usage: `@arthavid #[topic] #[trade] #[format] [your text]`
 
 ---
 
@@ -69,42 +69,42 @@
 ## Example Combos
 
 ```
-@avyu150 #nifty #breakout #thread Nifty crossing 25000 today
+@arthavid #nifty #breakout #thread Nifty crossing 25000 today
 ```
 → Twitter thread on Nifty breakout above 25000
 
 ```
-@avyu150 #ipo #bear #li Ola Electric IPO at ₹76 — overvalued?
+@arthavid #ipo #bear #li Ola Electric IPO at ₹76 — overvalued?
 ```
 → LinkedIn post with bearish take on Ola Electric IPO
 
 ```
-@avyu150 #earnings #fundamentals #yt Reliance Q3 missed estimates
+@arthavid #earnings #fundamentals #yt Reliance Q3 missed estimates
 ```
 → YouTube video package analyzing Reliance earnings fundamentally
 
 ```
-@avyu150 #crypto #bull #hook Bitcoin crossed $100k
+@arthavid #crypto #bull #hook Bitcoin crossed $100k
 ```
 → 10 scroll-stopping hooks for a bullish Bitcoin post
 
 ```
-@avyu150 #rbi #li RBI kept rates unchanged today
+@arthavid #rbi #li RBI kept rates unchanged today
 ```
 → LinkedIn post on RBI policy decision
 
 ```
-@avyu150 #swing #risk #ideas Bank Nifty this week
+@arthavid #swing #risk #ideas Bank Nifty this week
 ```
 → 5 swing trade content ideas for Bank Nifty with risk angle
 
 ```
-@avyu150 #nifty #technical #score [paste your draft here]
+@arthavid #nifty #technical #score [paste your draft here]
 ```
 → Score and improve your Nifty technical analysis post
 
 ```
-@avyu150 #startup #all Zepto raised $1B at $5B valuation
+@arthavid #startup #all Zepto raised $1B at $5B valuation
 ```
 → All 4 platform versions for Zepto funding news
 

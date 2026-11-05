@@ -164,7 +164,7 @@ function parseTags(message: string): ParsedTags {
 }
 
 function buildPrompt(parsed: ParsedTags): string {
-  const parts: string[] = ["You are FinMind, an AI fintech content assistant for a student content creator.\n"];
+  const parts: string[] = ["You are ArthaVid, an AI fintech content assistant for a student content creator.\n"];
 
   if (parsed.topicTags.length > 0) {
     parts.push("TOPIC CONTEXT:");
@@ -232,7 +232,7 @@ async function getBotUserId(): Promise<string> {
 
 // ── Help message ──────────────────────────────────────────────────
 
-const HELP_MESSAGE = `👋 I'm **FinMind** — your AI fintech content assistant.
+const HELP_MESSAGE = `👋 I'm **ArthaVid** — your AI fintech content assistant.
 
 Use hashtag combos to generate content:
 
@@ -325,7 +325,7 @@ async function handlePost(post: any): Promise<void> {
     `#${parsed.formatTag}`,
   ].join(" ");
 
-  console.log(`[FinMind] ${tagSummary} | "${parsed.content}"`);
+  console.log(`[ArthaVid] ${tagSummary} | "${parsed.content}"`);
 
   const thinkingPost = await createPost(post.channel_id, "✍️ Working on it...", threadRoot);
 
@@ -340,7 +340,7 @@ async function handlePost(post: any): Promise<void> {
       `❌ Error: ${err instanceof Error ? err.message : "unknown error"}`,
       threadRoot
     );
-    console.error("[FinMind] Error:", err);
+    console.error("[ArthaVid] Error:", err);
   }
 }
 
@@ -350,7 +350,7 @@ let seqNum = 1;
 
 function connect(): void {
   const wsUrl = MM_URL.replace(/^http/, "ws") + "/api/v4/websocket";
-  console.log(`[FinMind] Connecting to ${wsUrl} ...`);
+  console.log(`[ArthaVid] Connecting to ${wsUrl} ...`);
   const ws = new WebSocket(wsUrl);
 
   ws.on("open", () => {
@@ -361,16 +361,16 @@ function connect(): void {
     let msg: any;
     try { msg = JSON.parse(raw.toString()); } catch { return; }
     if (msg.event === "hello") {
-      console.log("[FinMind] ✅ Authenticated!");
-      console.log(`[FinMind] Listening for @${BOT_USERNAME} ...\n`);
+      console.log("[ArthaVid] ✅ Authenticated!");
+      console.log(`[ArthaVid] Listening for @${BOT_USERNAME} ...\n`);
     }
     if (msg.event === "posted") {
       try { handlePost(JSON.parse(msg.data.post)).catch(console.error); } catch {}
     }
   });
 
-  ws.on("error", (err) => console.error("[FinMind] WS error:", err.message));
-  ws.on("close", () => { console.log("[FinMind] Disconnected — reconnecting in 5s..."); setTimeout(connect, 5000); });
+  ws.on("error", (err) => console.error("[ArthaVid] WS error:", err.message));
+  ws.on("close", () => { console.log("[ArthaVid] Disconnected — reconnecting in 5s..."); setTimeout(connect, 5000); });
 
   setInterval(() => {
     if (ws.readyState === WebSocket.OPEN) ws.send(JSON.stringify({ seq: seqNum++, action: "ping" }));
@@ -381,7 +381,7 @@ function connect(): void {
 
 console.log(`
 ╔══════════════════════════════════════════╗
-║   FinMind — AI Fintech Content Bot       ║
+║   ArthaVid — AI Fintech Content Bot      ║
 ║   Powered by Groq · Free                 ║
 ╠══════════════════════════════════════════╣
 ║  Bot:   @${BOT_USERNAME.padEnd(30)}  ║
@@ -390,4 +390,4 @@ console.log(`
 `);
 
 connect();
-process.on("SIGINT", () => { console.log("\n[FinMind] Shutting down..."); process.exit(0); });
+process.on("SIGINT", () => { console.log("\n[ArthaVid] Shutting down..."); process.exit(0); });
