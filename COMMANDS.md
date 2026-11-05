@@ -110,6 +110,21 @@
 
 ---
 
+## 4️⃣ Live Data — Hacker News
+
+| Command | What it does |
+|---------|-------------|
+| `#hn` | Top 5 fintech/tech stories trending on HN right now |
+| `#hn #crypto` | Top crypto stories on HN |
+| `#hn #startup` | Top startup/VC stories on HN |
+| `#hn #ipo` | IPO-related HN stories |
+| `#hn #crypto #thread` | Fetches top HN crypto story + generates a Twitter thread from it |
+| `#hn #startup #li` | Fetches top HN startup story + writes a LinkedIn post from it |
+
+> **How it works:** Uses the free Algolia HN API — no API key needed. Stories are filtered by topic and sorted by HN score (upvotes). Adding a format tag (`#thread`, `#li`, etc.) makes the bot generate content directly from the top trending story.
+
+---
+
 ## Tips
 
 - **More tags = more specific output** — combine freely
@@ -117,3 +132,4 @@
 - Use `#score` before posting anything — it makes your content noticeably better
 - Use `#all` after creating something good — instant content calendar
 - `#bear` on a stock you're watching = great contrarian content that drives engagement
+- `#hn #[topic] #thread` = content grounded in real trending stories, not AI guesses — judges love this

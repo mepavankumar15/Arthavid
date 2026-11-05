@@ -53,16 +53,20 @@ const TRADE_TAGS: Record<string, string> = {
 };
 
 const FORMAT_PROMPTS: Record<string, string> = {
-  thread:  "Write a Twitter/X thread (5-7 tweets, numbered 1/ 2/ 3/ format). Each tweet under 280 chars. Punchy, shareable. End with a CTA.",
-  linkedin:      "Write a LinkedIn post (150-300 words). Short paragraphs. First line is a scroll-stopper. Professional but human. End with a question.",
-  instagram:      "Write an Instagram caption (100-150 words) + line break + 15 relevant hashtags. Conversational, story-driven.",
-  youtube:      "Write a YouTube package:\nTitle: [under 60 chars]\nDescription: [150-word SEO description]\nTags: [10 comma-separated tags]",
-  repurpose:     "Repurpose this for all 4 platforms. Label each clearly:\n🐦 TWITTER THREAD:\n💼 LINKEDIN:\n📸 INSTAGRAM:\n🎬 YOUTUBE:",
-  score:   "Score this post out of 10. Format:\nScore: X/10\nWhy: [2-3 specific reasons]\nImproved version: [full rewrite]\nWhat changed: [bullet points]\nBe brutally honest.",
-  hook:    "Write 10 scroll-stopping opening lines. Use different styles: stat, question, hot take, story, contrast, prediction. Number them 1-10. Just the hooks, no explanations.",
-  ideas:   "Give 5 content ideas. For each:\n[number]. Title\nPlatform: [best platform]\nAngle: [unique angle in one line]\nHook: [opening line]",
-  explain: "Explain this as a Twitter thread (5-6 tweets, 1/ 2/ 3/ format). Use one real-world analogy. No jargon without explaining it. End with 'Save this 🔖'",
-  story:   "Write a LinkedIn story post (150-250 words). Structure: Hook → What happened → What I expected vs what happened → Lesson. End with a question.",
+  thread:   "Write a Twitter/X thread (5-7 tweets, numbered 1/ 2/ 3/ format). Each tweet under 280 chars. Punchy, shareable. End with a CTA.",
+  li:       "Write a LinkedIn post (150-300 words). Short paragraphs. First line is a scroll-stopper. Professional but human. End with a question.",
+  linkedin: "Write a LinkedIn post (150-300 words). Short paragraphs. First line is a scroll-stopper. Professional but human. End with a question.",
+  ig:       "Write an Instagram caption (100-150 words) + line break + 15 relevant hashtags. Conversational, story-driven.",
+  instagram:"Write an Instagram caption (100-150 words) + line break + 15 relevant hashtags. Conversational, story-driven.",
+  yt:       "Write a YouTube package:\nTitle: [under 60 chars]\nDescription: [150-word SEO description]\nTags: [10 comma-separated tags]",
+  youtube:  "Write a YouTube package:\nTitle: [under 60 chars]\nDescription: [150-word SEO description]\nTags: [10 comma-separated tags]",
+  all:      "Repurpose this for all 4 platforms. Label each clearly:\n🐦 TWITTER THREAD:\n💼 LINKEDIN:\n📸 INSTAGRAM:\n🎬 YOUTUBE:",
+  repurpose:"Repurpose this for all 4 platforms. Label each clearly:\n🐦 TWITTER THREAD:\n💼 LINKEDIN:\n📸 INSTAGRAM:\n🎬 YOUTUBE:",
+  score:    "Score this post out of 10. Format:\nScore: X/10\nWhy: [2-3 specific reasons]\nImproved version: [full rewrite]\nWhat changed: [bullet points]\nBe brutally honest.",
+  hook:     "Write 10 scroll-stopping opening lines. Use different styles: stat, question, hot take, story, contrast, prediction. Number them 1-10. Just the hooks, no explanations.",
+  ideas:    "Give 5 content ideas. For each:\n[number]. Title\nPlatform: [best platform]\nAngle: [unique angle in one line]\nHook: [opening line]",
+  explain:  "Explain this as a Twitter thread (5-6 tweets, 1/ 2/ 3/ format). Use one real-world analogy. No jargon without explaining it. End with 'Save this 🔖'",
+  story:    "Write a LinkedIn story post (150-250 words). Structure: Hook → What happened → What I expected vs what happened → Lesson. End with a question.",
 };
 
 const BASE_STYLE = `
@@ -75,6 +79,68 @@ Style rules (always follow):
 - Use specific numbers and examples when possible
 - Not financial advice — always suits a learner's perspective
 `;
+
+// ── Hacker News (Algolia free API) ───────────────────────────────
+
+interface HNStory {
+  objectID: string;
+  title: string;
+  url?: string;
+  points: number;
+  num_comments: number;
+  author: string;
+  created_at: string;
+}
+
+/** Map our topic tags → HN search queries */
+const TOPIC_TO_HN_QUERY: Record<string, string> = {
+  ipo:         "IPO stock offering listing",
+  earnings:    "earnings revenue quarterly results profits",
+  rbi:         "RBI india central bank monetary policy interest rate",
+  crypto:      "crypto bitcoin ethereum blockchain defi",
+  nifty:       "india stock market nifty sensex BSE NSE",
+  budget:      "india budget fiscal policy tax government",
+  startup:     "startup funding venture capital seed round",
+  forex:       "forex currency exchange rate dollar rupee",
+  gold:        "gold commodities silver price rally",
+  fii:         "foreign investment india FII DII flows",
+  sector:      "sector analysis industry technology banking",
+  economy:     "economy GDP inflation macroeconomics recession",
+};
+
+async function fetchHNStories(query: string, limit = 5): Promise<HNStory[]> {
+  const url =
+    `https://hn.algolia.com/api/v1/search?query=${encodeURIComponent(query)}` +
+    `&tags=story&hitsPerPage=${limit}&numericFilters=points>30`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`HN API error: ${res.status}`);
+  const data: any = await res.json();
+  return (data.hits ?? []) as HNStory[];
+}
+
+function getTimeAgo(dateStr: string): string {
+  const diffH = Math.floor((Date.now() - new Date(dateStr).getTime()) / 3_600_000);
+  if (diffH < 1) return "just now";
+  if (diffH < 24) return `${diffH}h ago`;
+  return `${Math.floor(diffH / 24)}d ago`;
+}
+
+function formatHNStories(stories: HNStory[], label: string): string {
+  if (stories.length === 0) return `No HN stories found for **${label}** right now. Try a broader topic tag.`;
+
+  const lines: string[] = [`🔥 **Top HN Stories — ${label}**\n`];
+  stories.forEach((s, i) => {
+    const hnUrl = `https://news.ycombinator.com/item?id=${s.objectID}`;
+    lines.push(
+      `**${i + 1}. ${s.title}**`,
+      `⬆️ ${s.points} pts · 💬 ${s.num_comments} comments · ${getTimeAgo(s.created_at)}`,
+      s.url ? `📎 [Article](${s.url})  |  🗣 [HN Discussion](${hnUrl})` : `🗣 [HN Discussion](${hnUrl})`,
+      ""
+    );
+  });
+  lines.push("_Tip: Add a format tag to generate content from the top story — e.g. `#hn #crypto #thread`_");
+  return lines.join("\n");
+}
 
 // ── Tag Parser ────────────────────────────────────────────────────
 
@@ -174,17 +240,22 @@ Use hashtag combos to generate content:
 \`#ipo\` \`#earnings\` \`#rbi\` \`#crypto\` \`#nifty\` \`#budget\` \`#startup\` \`#forex\` \`#gold\` \`#fii\` \`#sector\` \`#economy\`
 
 **2️⃣ Format Tags** — where to post
-\`#thread\` \`#linkedin\` \`#instagram\` \`#youtube\` \`#repurpose\` \`#score\` \`#hook\` \`#ideas\` \`#explain\` \`#story\`
+\`#thread\` \`#li\` \`#ig\` \`#yt\` \`#all\` \`#score\` \`#hook\` \`#ideas\` \`#explain\` \`#story\`
 
 **3️⃣ Stock/Trade Tags** — technical angle
 \`#bull\` \`#bear\` \`#breakout\` \`#support\` \`#resistance\` \`#trend\` \`#volume\` \`#momentum\` \`#reversal\` \`#swing\` \`#intraday\` \`#longterm\` \`#dca\` \`#fundamentals\` \`#technical\` \`#risk\`
 
+**🔥 Hacker News Integration** — real trending stories
+\`#hn\` — show top fintech stories from HN right now
+\`#hn #crypto\` — top crypto stories on HN
+\`#hn #startup #thread\` — generate a thread from the top HN startup story
+
 **Examples:**
 \`@${BOT_USERNAME} #nifty #breakout #thread Nifty crossing 25000 today\`
 \`@${BOT_USERNAME} #ipo #bear #li Ola Electric IPO overvalued\`
-\`@${BOT_USERNAME} #earnings #fundamentals #yt Reliance Q3 results\`
+\`@${BOT_USERNAME} #hn #crypto\` — live HN crypto stories
+\`@${BOT_USERNAME} #hn #startup #thread\` — thread from top HN startup story
 \`@${BOT_USERNAME} #crypto #bull #hook Bitcoin hitting $100k\`
-\`@${BOT_USERNAME} #swing #ideas stocks to watch this week\`
 
 Mix any tags together — more tags = more specific output!`;
 
@@ -203,6 +274,45 @@ async function handlePost(post: any): Promise<void> {
 
   if (!cleanMessage) {
     await createPost(post.channel_id, HELP_MESSAGE, threadRoot);
+    return;
+  }
+
+  // ── Hacker News mode ──────────────────────────────────────────────
+  if (/#hn\b/i.test(cleanMessage)) {
+    const parsed = parseTags(cleanMessage);
+    const topicTag = parsed.topicTags[0];
+    const label    = topicTag ? `#${topicTag}` : "fintech";
+    const query    = topicTag ? TOPIC_TO_HN_QUERY[topicTag] : "fintech startup technology";
+
+    const thinkingPost = await createPost(post.channel_id, "🔍 Fetching from Hacker News...", threadRoot);
+
+    try {
+      const stories = await fetchHNStories(query);
+
+      // If a format tag is explicitly in the message, generate content from the top story
+      const hasExplicitFormat = Object.keys(FORMAT_PROMPTS).some(
+        key => new RegExp(`#${key}\\b`, "i").test(cleanMessage)
+      );
+      if (stories.length > 0 && hasExplicitFormat) {
+        const top = stories[0];
+        const storyContext = `Title: "${top.title}"\nURL: ${top.url ?? "N/A"}\nHN Score: ${top.points} pts | ${top.num_comments} comments\n\nThis is a REAL trending story on Hacker News right now. Use this as your source.`;
+        const contentPrompt = buildPrompt(parsed);
+        const [storiesMsg, contentMsg] = await Promise.all([
+          Promise.resolve(formatHNStories(stories, label)),
+          askGroq(contentPrompt, storyContext),
+        ]);
+
+        await deletePost(thinkingPost.id);
+        await createPost(post.channel_id, storiesMsg, threadRoot);
+        await createPost(post.channel_id, `✍️ **Content based on top story:**\n\n${contentMsg}`, threadRoot);
+      } else {
+        await deletePost(thinkingPost.id);
+        await createPost(post.channel_id, formatHNStories(stories, label), threadRoot);
+      }
+    } catch (err) {
+      await deletePost(thinkingPost.id).catch(() => {});
+      await createPost(post.channel_id, `❌ HN fetch failed: ${err instanceof Error ? err.message : "unknown"}`, threadRoot);
+    }
     return;
   }
 
